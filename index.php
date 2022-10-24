@@ -72,6 +72,10 @@
         $conn->close();
 
         ?>
+
+        <div class="seperator"></div>
+
+        <a style="color: chartreuse; text-decoration: underline;"href="https://github.com/L0wLauch11/archive.lowlauch.wtf">source</a>
     </div>
     
 </body>
