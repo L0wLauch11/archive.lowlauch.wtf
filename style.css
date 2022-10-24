@@ -1,0 +1,116 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
+
+html {
+    background-color: black;
+    background: url('bg2.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    font-family: 'Roboto Mono', sans-serif;
+}
+
+h1 {
+    color: aquamarine;
+}
+
+.seperator {
+    height: 2px;
+    background-color: rgba(255, 255, 255, 0.25);
+    width: 100%;
+    padding: 0px;
+    margin-bottom: 16px;
+    margin-top: 16px;
+}
+
+.container {
+    padding: 32px 64px 55px 64px;
+    background-color: rgba(0, 0, 0, 0.25);
+    width: 50%;
+    margin: 32px auto;
+    min-height: 400px;
+    border-radius: 10px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.subcontainer {
+    padding: 4px 16px 16px 16px;
+    width: fit-content;
+    border-style: solid;
+    border-radius: 6px;
+    border-width: 1px;
+    border-color: white;
+}
+
+.button, .textbox, .fileselect, .file {
+    padding: 4px 8px;
+    width: fit-content;
+    border-style: solid;
+    border-radius: 6px;
+    border-width: 1px;
+    background-color: black;
+    color: white;
+}
+
+.textbox:hover, .button:hover {
+    padding: 4px 8px;
+    width: fit-content;
+    border-style: solid;
+    border-radius: 6px;
+    border-width: 2px;
+    background-color: black;
+    border-color: chartreuse;
+}
+
+.file {
+    margin-bottom: 16px;
+    width: inherit;
+    border-color: white;
+    color: chartreuse;
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.fileselect {
+    width: 250px;
+}
+
+a {
+    text-decoration: none;
+}
+
+.file {
+    color: chartreuse;
+    font-size: 18px;
+}
+
+.file-description, .file-size, .file-date {
+    color: white;
+    font-size: 16px;
+}
+
+.file-size {
+    font-weight: bold;
+}
+
+.file-date {
+    text-align: right;
+    margin-top: -20px;
+    font-weight: bold;
+}
+
+.file:hover {
+    border-color: chartreuse;
+    background-color: rgba(127, 255, 0, 0.1);
+}
+
+@media only screen and (max-width: 800px) {
+    .container {
+        padding: 4px 8px;
+        background-color: rgba(0, 0, 0, 0.25);
+        width: 90%;
+        margin: 32px auto;
+        border-radius: 10px;
+        border-style: solid;
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+  }
