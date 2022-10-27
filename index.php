@@ -55,6 +55,8 @@
             die("Connection failed: " . $conn->connect_error);
         }
 
+        $files_list = array();
+
         $table_data = get_table($table, $conn);
         while ($row = $table_data->fetch_assoc()) {
             $fileURL = $row['fileURL'];
@@ -64,9 +66,29 @@
             $fileDate = $row['fileDate'];
 
             if ($fileSizeInMB == 0)
-                $fileSizeInMB = "< 1";
+                $fileSizeInMB = "&lt; 1";
 
-            echo "<a href='$fileURL' target='_blank'><div class='file'>$fileName<br><div class='file-description'>$fileDescription</div><div class='file-size'>{$fileSizeInMB}MB</div><div class='file-date'>$fileDate</div></div></a>";
+            $file_div = "
+            <a href='$fileURL' target='_blank'>
+                <div class='file'>
+                    $fileName
+
+                    <br>
+
+                    <div class='file-description'>$fileDescription</div>
+                    <div class='file-size'>{$fileSizeInMB}MB</div>
+                    <div class='file-date'>$fileDate</div>
+                    
+                </div>
+            </a> ";
+
+            array_push($files_list, $file_div);
+        }
+
+        $files_list = array_reverse($files_list);
+
+        foreach ($files_list as $file) {
+            echo $file;
         }
 
         $conn->close();
@@ -75,10 +97,8 @@
 
         <div class="seperator"></div>
 
-        <a style="color: chartreuse; text-decoration: underline;"href="https://github.com/L0wLauch11/archive.lowlauch.wtf">source</a>
+        <a style="color: chartreuse; text-decoration: underline;" href="https://github.com/L0wLauch11/archive.lowlauch.wtf">source</a>
     </div>
     
 </body>
-
-<script src="selectfile.js"></script>
 </html>
