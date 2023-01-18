@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap');
 
-html {
+body {
     background-color: black;
     background: url('bg2.jpg') no-repeat center center fixed;
     background-size: cover;

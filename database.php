@@ -27,7 +27,7 @@ $operation = $_GET['o'];
 
 switch ($operation) {
     case 'inittable':
-        $sql = "CREATE TABLE IF NOT EXISTS $table (fileName VARCHAR(255), fileSizeInMB INT(100), fileDescription VARCHAR(1000), fileURL VARCHAR(2048), fileDate VARCHAR(2048))";
+        $sql = "CREATE TABLE IF NOT EXISTS $table (fileName VARCHAR(255), fileSizeInMB INT(100), fileDescription VARCHAR(1000), fileURL VARCHAR(2048), fileDate VARCHAR(2048), fileHidden INT(100))";
         $conn->query($sql);
 
         echo 'Done';
@@ -40,8 +40,9 @@ switch ($operation) {
         $fileDescription = $_GET['d'];
         $fileURL = $_GET['u'];
         $fileDate = $_GET['v'];
+        $fileHidden = $_GET['h'];
 
-        $sql = "INSERT INTO $table (fileName, fileSizeInMB, fileDescription, fileURL, fileDate) VALUES ('$fileName', '$fileSize', '$fileDescription', '$fileURL', '$fileDate')";
+        $sql = "INSERT INTO $table (fileName, fileSizeInMB, fileDescription, fileURL, fileDate, fileHidden) VALUES ('$fileName', '$fileSize', '$fileDescription', '$fileURL', '$fileDate', '$fileHidden')";
         $result = $conn->query($sql);
 
         echo 'Done';

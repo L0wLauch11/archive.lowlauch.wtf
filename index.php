@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,6 +9,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="uploadfile.js"></script>
 </head>
+
 <body>
     <div class="container">
         <h1>Archiv</h1>
@@ -25,7 +27,7 @@
          -->
 
         <div class="seperator"></div>
-        
+
         <?php
 
         ini_set('display_errors', 1);
@@ -38,12 +40,12 @@
         $username = $ini_array['username'];
         $password = $ini_array['password'];
         $dbname = $ini_array['dbname'];
-        
+
         $table = 'archive';
 
-        function get_table($table, $conn) {
+        function get_table($table, $conn)
+        {
             $sql_all = "SELECT * FROM $table";
-            $result = $conn->query($sql_all);
             return $conn->query($sql_all);
         }
 
@@ -64,12 +66,23 @@
             $fileDescription = $row['fileDescription'];
             $fileSizeInMB = $row['fileSizeInMB'];
             $fileDate = $row['fileDate'];
+            $fileHidden = $row['fileHidden'];
+
+            if (isset($_GET['file'])) {
+                $requestedFile = $_GET['file'];
+                if ($fileName == $requestedFile) {
+                    header("Location: $fileURL");
+                }
+            }
+
+            if ($fileHidden == 1)
+                continue;
 
             if ($fileSizeInMB == 0)
                 $fileSizeInMB = "&lt; 1";
 
             $file_div = "
-            <a href='$fileURL' target='_blank'>
+            <a href='?file=$fileName' target='_blank'>
                 <div class='file'>
                     $fileName
 
@@ -97,8 +110,10 @@
 
         <div class="seperator"></div>
 
-        <a style="color: chartreuse; text-decoration: underline;" href="https://github.com/L0wLauch11/archive.lowlauch.wtf">source</a>
+        <a style="color: chartreuse; text-decoration: underline;"
+            href="https://github.com/L0wLauch11/archive.lowlauch.wtf">source</a>
     </div>
-    
+
 </body>
+
 </html>
