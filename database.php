@@ -41,9 +41,20 @@ switch ($operation) {
         $fileURL = $_GET['u'];
         $fileDate = $_GET['v'];
         $fileHidden = $_GET['h'];
+        $fileOverwrite = $_GET['e'];
+
+        if ($fileOverwrite == 1) {
+            $sqlFileExists = "SELECT * FROM $table WHERE fileName='$fileName'";
+            $result = $conn->query($sqlFileExists);
+
+            if (mysqli_num_rows($result) > 0) {
+                $sql = "DELETE FROM $table WHERE fileName='$fileName'";
+                $conn->query($sql);
+            }
+        }
 
         $sql = "INSERT INTO $table (fileName, fileSizeInMB, fileDescription, fileURL, fileDate, fileHidden) VALUES ('$fileName', '$fileSize', '$fileDescription', '$fileURL', '$fileDate', '$fileHidden')";
-        $result = $conn->query($sql);
+        $conn->query($sql);
 
         echo 'Done';
         

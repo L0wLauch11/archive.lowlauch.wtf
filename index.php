@@ -13,7 +13,12 @@
 <body>
     <div class="container">
         <a href="/"><h1>Archiv</h1></a>
-        <a href="https://archive.lowlauch.wtf/?file=Archiv%20Uploader.7z">Archiv Uplaoder download</a>
+        <p>
+            archive.lowlauch.wtf ist ein Archiv, welches unlimitierten Speicherplatz hat indem es sich die Dienste von <a href="https://nft.storage/">https://nft.storage/</a> zu nutze macht. Hochladen kann man Dateien mit dem Archiv Uploader und zwei Zugangstokens die man von mir bekommen kann.
+            <br><br>
+            Der Uploader läuft unter Windows mit dem <a href="https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net472-offline-installer">.NET Framework 4.7.2</a><br>oder unter Linux/MacOS/*BSD mit <a href="https://www.mono-project.com/">mono</a> und <a href="https://nodejs.org/en/download/">NodeJS</a>.
+        </p>
+        <a href="https://archive.lowlauch.wtf/?file=ArchivUploader.7z">Archiv Uplaoder download</a>
 
         <div class="seperator"></div>
 
@@ -143,8 +148,7 @@
 
         <div class="seperator"></div>
 
-        <a style="color: #1F6FEB; text-decoration: underline;"
-            href="https://github.com/L0wLauch11/archive.lowlauch.wtf">source</a>
+        <a href="https://github.com/L0wLauch11/archive.lowlauch.wtf">source</a>
     </div>
 
 </body>
