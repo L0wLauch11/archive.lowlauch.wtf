@@ -12,23 +12,30 @@
 
 <body>
     <div class="container">
-        <h1>Archiv</h1>
-        <!--
-        <div class="subcontainer">
-            <h2>Datei hochladen</h2>
-
-            <input type="hidden" name="MAX_FILE_SIZE" value="107400000"> Max filesize: 100MB
-            Datei: <input class="button" id="file-input" type="file" name="submit" value="Hochladen"><br><br>
-            Passwort: <input class="textbox" type="password" name="password">
-            <button class="button" onclick="uploadFile()">Hochladen</button>
-            <p style="font-size: 12px;">Max. Dateigröße: 100MB</p>
-
-        </div>
-         -->
+        <a href="/"><h1>Archiv</h1></a>
+        <a href="https://archive.lowlauch.wtf/?file=Archiv%20Uploader.7z">Archiv Uplaoder download</a>
 
         <div class="seperator"></div>
 
         <?php
+
+        function fileDiv($fileName, $fileDescription, $fileSizeInMB, $fileDate, $fileLink = -1) {
+            if ($fileLink == -1)
+                $fileLink = "?file=$fileName";
+
+            return "<a href='$fileLink' target='_blank'>
+                <div class='file'>
+                    <div class='filename'>$fileName</div>
+
+                    <br>
+
+                    <div class='file-description'>$fileDescription</div>
+                    <div class='file-size'>{$fileSizeInMB}MB</div>
+                    <div class='file-date'>$fileDate</div>
+                    
+                </div>
+            </a> ";
+        }
 
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
@@ -57,7 +64,9 @@
             die("Connection failed: " . $conn->connect_error);
         }
 
+        // Add all listed files to an array to be shown later 
         $files_list = array();
+        $files_to_download = array();
 
         $table_data = get_table($table, $conn);
         while ($row = $table_data->fetch_assoc()) {
@@ -71,7 +80,7 @@
             if (isset($_GET['file'])) {
                 $requestedFile = $_GET['file'];
                 if ($fileName == $requestedFile) {
-                    header("Location: $fileURL");
+                    array_push($files_to_download, $row);
                 }
             }
 
@@ -81,36 +90,60 @@
             if ($fileSizeInMB == 0)
                 $fileSizeInMB = "&lt; 1";
 
-            $file_div = "
-            <a href='?file=$fileName' target='_blank'>
-                <div class='file'>
-                    $fileName
-
-                    <br>
-
-                    <div class='file-description'>$fileDescription</div>
-                    <div class='file-size'>{$fileSizeInMB}MB</div>
-                    <div class='file-date'>$fileDate</div>
-                    
-                </div>
-            </a> ";
+            $file_div = fileDiv($fileName, $fileDescription, $fileSizeInMB, $fileDate);
 
             array_push($files_list, $file_div);
         }
+        
+        if (isset($_GET['file']))
+        {
+            // Multiple files with the same name handling
+            if (count($files_to_download) > 1) {
+                echo '<p style="text-align: center;">Es gibt mehr als eine Datei mit diesem Namen.<br><br><span style="font-size: 18px; font-weight: bold;">Wähle eine Aus!</span></p><div class="seperator"></div>';
 
+                $fileURLsAlreadyListed = array();
+                foreach ($files_to_download as $file)
+                {
+                    $fileURL = $file['fileURL'];
+
+                    // Don't list the same file twice
+                    if (in_array($fileURL, $fileURLsAlreadyListed))
+                        continue;
+
+                    array_push($fileURLsAlreadyListed, $fileURL);
+
+                    $fileName = $file['fileName'];
+                    $fileDescription = $file['fileDescription'];
+                    $fileSizeInMB = $file['fileSizeInMB'];
+                    $fileDate = $file['fileDate'];
+                    $fileHidden = $file['fileHidden'];
+
+                    echo fileDiv($fileName, $fileDescription, $fileSizeInMB, $fileDate, $fileURL);
+                }
+                return;
+            } else
+            {
+                $fileURL = $files_to_download[0]['fileURL'];
+                header("Location: $fileURL");
+                die();
+            }
+        }
+
+        // Show file array
         $files_list = array_reverse($files_list);
 
         foreach ($files_list as $file) {
             echo $file;
         }
 
+        // Close MySQL Connection
         $conn->close();
 
         ?>
 
         <div class="seperator"></div>
 
-        <a style="color: chartreuse; text-decoration: underline;"
+        <a style="color: #1F6FEB; text-decoration: underline;"
             href="https://github.com/L0wLauch11/archive.lowlauch.wtf">source</a>
     </div>
 
