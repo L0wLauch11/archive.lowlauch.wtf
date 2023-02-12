@@ -34,6 +34,34 @@ switch ($operation) {
 
         break;
 
+    case 'getfiles':
+        $sql = "SELECT * FROM $table";
+        $result = $conn->query($sql);
+
+        $files_list = array();
+
+        $table_data = $conn->query($sql);
+        while ($row = $table_data->fetch_assoc()) {
+            array_push($files_list, $row['fileName'] . "\n");
+        }
+        $files_list = array_reverse($files_list);
+
+        foreach ($files_list as $file) {
+            print $file;
+        }
+
+        break;
+
+    case 'deletefile':
+        $fileName = $_GET['n'];
+
+        $sql = "DELETE FROM $table WHERE fileName='$fileName'";
+        $conn->query($sql);
+
+        print 'Done';
+
+        break;
+
     case 'linkfile':
         $fileName = $_GET['n'];
         $fileSize = $_GET['s'];
