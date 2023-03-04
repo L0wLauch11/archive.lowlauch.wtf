@@ -31,19 +31,21 @@
             <h3><a href="/?file=ArchivUploader.7z">Archiv Uploader download</a></h3>
         </div>
 
-        <div style="padding-top: 32px"></div>
+        <div class="seperator-small-bottom"></div>
 
         <div class="category-select">
-            <span>Kategorien: </span>
-            <a href="/">Alle</a>
-            <a href="/?filetypes=mp4,m4a,flv,avi,webm,mov,mkv">Videos</a>
-            <a href="/?filetypes=exe,appimage,py,mpy,apk">Applikationen</a>
-            <a href="/?filetypes=png,webp,gif,apng,jpg,jpeg,qoi,svg,heic,heif,raw,tiff,psd,pdn,bmp">Grafiken</a>
-            <a href="/?filetypes=zip,7z,tar,xz,gz,rar">Archive</a>
-            <a href="/?filetypes=docx,doc,pdf">Dokumente</a>
+            <ul>
+                <li><a href="/">Alle</a></li>
+                <li><a href="/?filetypes=mp4,m4a,flv,avi,webm,mov,mkv">Videos</a></li>
+                <li><a href="/?filetypes=exe,appimage,py,mpy,apk">Applikationen</a></li>
+                <li><a href="/?filetypes=png,webp,gif,apng,jpg,jpeg,qoi,svg,heic,heif,raw,tiff,psd,pdn,bmp">Grafiken</a>
+                </li>
+                <li><a href="/?filetypes=zip,7z,tar,xz,gz,rar">Archive</a></li>
+                <li><a href="/?filetypes=docx,doc,pdf">Dokumente</a></li>
+            </ul>
         </div>
 
-        <div class="seperator"></div>
+        <div class="seperator-small-top"></div>
 
         <?php
 
