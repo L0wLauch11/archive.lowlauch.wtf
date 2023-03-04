@@ -12,25 +12,47 @@
 
 <body>
     <div class="container">
-        <a href="/"><h1>Archiv</h1></a>
-        <p>
-            archive.lowlauch.wtf ist ein Archiv, welches unlimitierten Speicherplatz hat, indem es sich die Dienste von <a href="https://nft.storage/">https://nft.storage/</a> zu nutze macht. Hochladen kann man Dateien mit dem Archiv Uploader und zwei Zugangstokens die man von mir bekommen kann.
-            <br><br>
-            Der Uploader läuft unter Windows mit dem <a href="https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net472-offline-installer">.NET Framework 4.7.2</a><br>oder unter Linux/MacOS/*BSD mit <a href="https://www.mono-project.com/">mono</a> und <a href="https://nodejs.org/en/download/">NodeJS</a>.
-        </p>
-        <h3><a href="https://archive.lowlauch.wtf/?file=ArchivUploader.7z">Archiv Uploader download</a></h3>
+        <a href="/">
+            <h1>Archiv</h1>
+        </a>
+
+        <div class="info">
+            <p>
+                archive.lowlauch.wtf ist ein Archiv, welches unlimitierten Speicherplatz hat, indem es sich die Dienste
+                von <a href="https://nft.storage/">https://nft.storage/</a> zu nutze macht. Hochladen kann man Dateien
+                mit dem Archiv Uploader und zwei Zugangstokens die man von mir bekommen kann.
+                <br><br>
+                Der Uploader läuft unter Windows mit dem <a
+                    href="https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net472-offline-installer">.NET
+                    Framework 4.7.2</a><br>oder unter Linux/MacOS/*BSD mit <a
+                    href="https://www.mono-project.com/">mono</a> und <a
+                    href="https://nodejs.org/en/download/">NodeJS</a>.
+            </p>
+            <h3><a href="/?file=ArchivUploader.7z">Archiv Uploader download</a></h3>
+        </div>
+
+        <div style="padding-top: 32px"></div>
+
+        <div class="category-select">
+            <span>Kategorien: </span>
+            <a href="/">Alle</a>
+            <a href="/?filetypes=mp4,m4a,flv,avi,webm,mov,mkv">Videos</a>
+            <a href="/?filetypes=exe,appimage,py,mpy,apk">Applikationen</a>
+            <a href="/?filetypes=png,webp,gif,apng,jpg,jpeg,qoi,svg,heic,heif,raw,tiff,psd,pdn,bmp">Grafiken</a>
+            <a href="/?filetypes=zip,7z,tar,xz,gz,rar">Archive</a>
+            <a href="/?filetypes=docx,doc,pdf">Dokumente</a>
+        </div>
 
         <div class="seperator"></div>
 
-        <p style="color: red;">Größere Downloads (>500mb) könnten sehr langsam sein, oder andere Probleme aufweisen!</p>
-
         <?php
 
-        function fileDiv($fileName, $fileDescription, $fileSizeInMB, $fileDate, $fileLink = -1) {
+        function fileDiv($fileName, $fileDescription, $fileSizeInMB, $fileDate, $fileLink = -1)
+        {
             if ($fileLink == -1)
                 $fileLink = "?file=$fileName";
 
-            return "<a href='$fileLink' target='_blank'>
+            $str = "<a href='$fileLink' target='_blank'>
                 <div class='file'>
                     <div class='filename'>$fileName</div>
 
@@ -41,7 +63,24 @@
                     <div class='file-date'>$fileDate</div>
                     
                 </div>
-            </a> ";
+            </a>";
+
+            if ($fileSizeInMB >= 500) {
+                $str = "<a href='$fileLink' target='_blank'>
+                    <div class='file'>
+                        <div class='filename'>$fileName</div>
+
+                        <br>
+
+                        <div class='file-description'>$fileDescription</div>
+                        <div class='file-size' style='color: red;'>{$fileSizeInMB}MB</div>
+                        <div class='file-date'>$fileDate</div>
+                        
+                    </div>
+                </a>";
+            }
+
+            return $str;
         }
 
         ini_set('display_errors', 1);
@@ -83,6 +122,22 @@
             $fileSizeInMB = $row['fileSizeInMB'];
             $fileDate = $row['fileDate'];
             $fileHidden = $row['fileHidden'];
+            $fileType = explode('.', $fileName)[count(explode('.', $fileName)) - 1]; // xd
+        
+            if (isset($_GET['filetypes'])) {
+                $allowedFiletypes = $_GET['filetypes'];
+
+                // for PHP < 8
+                if (!function_exists('str_contains')) {
+                    function str_contains($haystack, $needle)
+                    {
+                        return $needle !== '' && mb_strpos($haystack, $needle) !== false;
+                    }
+                }
+
+                if (!str_contains(strtolower($allowedFiletypes), strtolower($fileType)))
+                    continue;
+            }
 
             if (isset($_GET['file'])) {
                 $requestedFile = $_GET['file'];
@@ -101,16 +156,14 @@
 
             array_push($files_list, $file_div);
         }
-        
-        if (isset($_GET['file']))
-        {
+
+        if (isset($_GET['file'])) {
             // Multiple files with the same name handling
             if (count($files_to_download) > 1) {
                 echo '<p style="text-align: center;">Es gibt mehr als eine Datei mit diesem Namen.<br><br><span style="font-size: 18px; font-weight: bold;">Wähle eine Aus!</span></p><div class="seperator"></div>';
 
                 $fileURLsAlreadyListed = array();
-                foreach ($files_to_download as $file)
-                {
+                foreach ($files_to_download as $file) {
                     $fileURL = $file['fileURL'];
 
                     // Don't list the same file twice
@@ -128,8 +181,7 @@
                     echo fileDiv($fileName, $fileDescription, $fileSizeInMB, $fileDate, $fileURL);
                 }
                 return;
-            } else
-            {
+            } else {
                 $fileURL = $files_to_download[0]['fileURL'];
                 header("Location: $fileURL");
                 die();
@@ -141,6 +193,10 @@
 
         foreach ($files_list as $file) {
             echo $file;
+        }
+
+        if (count($files_list) == 0) {
+            echo "Keine Dateien gefunden.";
         }
 
         // Close MySQL Connection

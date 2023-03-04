@@ -27,9 +27,8 @@ a {
 }
 
 .container {
-    padding: 0px 64px 55px 64px;
     background-color: #181A1B;
-    width: 50%;
+    max-width: 1200px;
     margin: 32px auto;
     min-height: 400px;
 }
@@ -84,11 +83,34 @@ a {
     text-decoration: none;
 }
 
+.info {
+    padding: 1px 20px;
+    outline-color: #232628;
+    outline-style: solid;
+    border-radius: 6px;
+}
+
+.category-select a {
+    margin-right: 16px;
+    padding: 8px 16px;
+    color: white;
+    font-weight: normal;
+    transition: 0.3s;
+    background-color: #232628;
+    border-radius: 6px;
+}
+
+.category-select a:hover {
+    color: #1F6FEB;
+    font-weight: normal;
+}
+
 .file-description,
 .file-size,
 .file-date {
     color: white;
     font-size: 16px;
+    font-weight: normal;
 }
 
 .file-size {
@@ -103,17 +125,4 @@ a {
 
 .file:hover {
     background-color: rgba(31, 111, 235, 1);
-}
-
-@media only screen and (max-width: 800px) {
-    .container {
-        padding: 2px;
-        width: 90%;
-        margin: 32px auto;
-    }
-
-    .file {
-        padding: 4px 8px;
-    }
-    
 }
