@@ -54,6 +54,11 @@
             if ($fileLink == -1)
                 $fileLink = "?file=$fileName";
 
+            $bigFileStyle = "";
+            if ($fileSizeInMB >= 500)
+                $bigFileStyle = "style='color: red;'";
+            
+
             $str = "<a href='$fileLink' target='_blank'>
                 <div class='file'>
                     <div class='filename'>$fileName</div>
@@ -61,26 +66,11 @@
                     <br>
 
                     <div class='file-description'>$fileDescription</div>
-                    <div class='file-size'>{$fileSizeInMB}MB</div>
+                    <div class='file-size' $bigFileStyle>{$fileSizeInMB}MB</div>
                     <div class='file-date'>$fileDate</div>
                     
                 </div>
             </a>";
-
-            if ($fileSizeInMB >= 500) {
-                $str = "<a href='$fileLink' target='_blank'>
-                    <div class='file'>
-                        <div class='filename'>$fileName</div>
-
-                        <br>
-
-                        <div class='file-description'>$fileDescription</div>
-                        <div class='file-size' style='color: red;'>{$fileSizeInMB}MB</div>
-                        <div class='file-date'>$fileDate</div>
-                        
-                    </div>
-                </a>";
-            }
 
             return $str;
         }
