@@ -49,25 +49,25 @@
 
         <?php
 
-        function fileDiv($fileName, $fileDescription, $fileSizeInMB, $fileDate, $fileLink = -1)
+        function file_div($file_name, $file_description, $file_size_in_mb, $file_date, $file_link = -1)
         {
-            if ($fileLink == -1)
-                $fileLink = "?file=$fileName";
+            if ($file_link == -1)
+                $file_link = "?file=$file_name";
 
-            $bigFileStyle = "";
-            if ($fileSizeInMB >= 500)
-                $bigFileStyle = "style='color: red;'";
+            $big_file_style = "";
+            if ($file_size_in_mb >= 500)
+                $big_file_style = "style='color: red;'";
             
 
-            $str = "<a href='$fileLink' target='_blank'>
+            $str = "<a href='$file_link' target='_blank'>
                 <div class='file'>
-                    <div class='filename'>$fileName</div>
+                    <div class='filename'>$file_name</div>
 
                     <br>
 
-                    <div class='file-description'>$fileDescription</div>
-                    <div class='file-size' $bigFileStyle>{$fileSizeInMB}MB</div>
-                    <div class='file-date'>$fileDate</div>
+                    <div class='file-description'>$file_description</div>
+                    <div class='file-size' $big_file_style>{$file_size_in_mb}mb</div>
+                    <div class='file-date'>$file_date</div>
                     
                 </div>
             </a>";
@@ -77,7 +77,7 @@
 
         ini_set('display_errors', 1);
         ini_set('display_startup_errors', 1);
-        error_reporting(E_ALL);
+        error_reporting(e_all);
 
         $ini_array = parse_ini_file("credentials.ini");
 
@@ -90,36 +90,36 @@
 
         function get_table($table, $conn)
         {
-            $sql_all = "SELECT * FROM $table";
+            $sql_all = "select * from $table";
             return $conn->query($sql_all);
         }
 
-        // Create connection
+        // create connection
         $conn = new mysqli($servername, $username, $password, $dbname);
 
-        // Check connection
+        // check connection
         if ($conn->connect_error) {
-            die("Connection failed: " . $conn->connect_error);
+            die("connection failed: " . $conn->connect_error);
         }
 
-        // Add all listed files to an array to be shown later 
+        // add all listed files to an array to be shown later 
         $files_list = array();
         $files_to_download = array();
 
         $table_data = get_table($table, $conn);
         while ($row = $table_data->fetch_assoc()) {
-            $fileURL = $row['fileURL'];
-            $fileName = $row['fileName'];
-            $fileDescription = $row['fileDescription'];
-            $fileSizeInMB = $row['fileSizeInMB'];
-            $fileDate = $row['fileDate'];
-            $fileHidden = $row['fileHidden'];
-            $fileType = explode('.', $fileName)[count(explode('.', $fileName)) - 1]; // xd
+            $file_url = $row['fileURL'];
+            $file_name = $row['fileName'];
+            $file_description = $row['fileDescription'];
+            $file_size_in_mb = $row['fileSizeInMB'];
+            $file_date = $row['fileDate'];
+            $file_hidden = $row['fileHidden'];
+            $file_type = explode('.', $file_name)[count(explode('.', $file_name)) - 1]; // xd
         
-            if (isset($_GET['filetypes'])) {
-                $allowedFiletypes = $_GET['filetypes'];
+            if (isset($_get['filetypes'])) {
+                $allowed_filetypes = $_get['filetypes'];
 
-                // for PHP < 8
+                // for php < 8
                 if (!function_exists('str_contains')) {
                     function str_contains($haystack, $needle)
                     {
@@ -127,60 +127,60 @@
                     }
                 }
 
-                if (!str_contains(strtolower($allowedFiletypes), strtolower($fileType)))
+                if (!str_contains(strtolower($allowed_filetypes), strtolower($file_type)))
                     continue;
             }
 
-            if (isset($_GET['file'])) {
-                $requestedFile = $_GET['file'];
-                if ($fileName == $requestedFile) {
+            if (isset($_get['file'])) {
+                $requested_file = $_get['file'];
+                if ($file_name == $requested_file) {
                     array_push($files_to_download, $row);
                 }
             }
 
-            if ($fileHidden == 1)
+            if ($file_hidden == 1)
                 continue;
 
-            if ($fileSizeInMB == 0)
-                $fileSizeInMB = "&lt; 1";
+            if ($file_size_in_mb == 0)
+                $file_size_in_mb = "&lt; 1";
 
-            $file_div = fileDiv($fileName, $fileDescription, $fileSizeInMB, $fileDate);
+            $file_div = file_div($file_name, $file_description, $file_size_in_mb, $file_date);
 
             array_push($files_list, $file_div);
         }
 
-        if (isset($_GET['file'])) {
-            // Multiple files with the same name handling
+        if (isset($_get['file'])) {
+            // multiple files with the same name handling
             if (count($files_to_download) > 1) {
-                echo '<p style="text-align: center;">Es gibt mehr als eine Datei mit diesem Namen.<br><br><span style="font-size: 18px; font-weight: bold;">Wähle eine Aus!</span></p><div class="seperator"></div>';
+                echo '<p style="text-align: center;">es gibt mehr als eine datei mit diesem namen.<br><br><span style="font-size: 18px; font-weight: bold;">wähle eine aus!</span></p><div class="seperator"></div>';
 
-                $fileURLsAlreadyListed = array();
+                $file_ur_ls_already_listed = array();
                 foreach ($files_to_download as $file) {
-                    $fileURL = $file['fileURL'];
+                    $file_url = $file['file_url'];
 
-                    // Don't list the same file twice
-                    if (in_array($fileURL, $fileURLsAlreadyListed))
+                    // don't list the same file twice
+                    if (in_array($file_url, $file_ur_ls_already_listed))
                         continue;
 
-                    array_push($fileURLsAlreadyListed, $fileURL);
+                    array_push($file_ur_ls_already_listed, $file_url);
 
-                    $fileName = $file['fileName'];
-                    $fileDescription = $file['fileDescription'];
-                    $fileSizeInMB = $file['fileSizeInMB'];
-                    $fileDate = $file['fileDate'];
-                    $fileHidden = $file['fileHidden'];
+                    $file_name = $file['file_name'];
+                    $file_description = $file['file_description'];
+                    $file_size_in_mb = $file['file_size_in_mb'];
+                    $file_date = $file['file_date'];
+                    $file_hidden = $file['file_hidden'];
 
-                    echo fileDiv($fileName, $fileDescription, $fileSizeInMB, $fileDate, $fileURL);
+                    echo file_div($file_name, $file_description, $file_size_in_mb, $file_date, $file_url);
                 }
                 return;
             } else {
-                $fileURL = $files_to_download[0]['fileURL'];
-                header("Location: $fileURL");
+                $file_url = $files_to_download[0]['file_url'];
+                header("location: $file_url");
                 die();
             }
         }
 
-        // Show file array
+        // show file array
         $files_list = array_reverse($files_list);
 
         foreach ($files_list as $file) {
@@ -188,10 +188,10 @@
         }
 
         if (count($files_list) == 0) {
-            echo "Keine Dateien gefunden.";
+            echo "keine dateien gefunden.";
         }
 
-        // Close MySQL Connection
+        // close my_sql connection
         $conn->close();
 
         ?>
